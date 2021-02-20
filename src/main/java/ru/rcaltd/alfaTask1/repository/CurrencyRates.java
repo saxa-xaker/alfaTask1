@@ -11,5 +11,9 @@ public interface CurrencyRates {
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
-    Currency getRates();
+    Currency getCurrentRates();
+
+    @RequestMapping(method = RequestMethod.GET)
+    @Headers("Content-Type: application/json")
+    Currency getYesterdayRates();
 }

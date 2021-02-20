@@ -10,22 +10,64 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.rcaltd.alfaTask1.entity.Currency;
 import ru.rcaltd.alfaTask1.repository.CurrencyRates;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Properties;
+
 @RestController
 public class MainController {
 
-    final CurrencyRates currencyRates;
-    String url = "https://openexchangerates.org/api/latest.json?app_id=80aa77df391c4d529ee8affddb60e2a2";
+    static String feignCurrentUrl;
+    static String feignYesterdayUrl;
+    final CurrencyRates currentRates;
+    final CurrencyRates yesterdayRates;
+    String feignAppid;
 
     public MainController() {
-        this.currencyRates = Feign.builder()
+
+        LocalDate yesterday = LocalDate.now().minusDays(100);
+
+        Properties property = new Properties();
+        try (
+                FileInputStream fis = new FileInputStream("src/main/resources/application.properties")) {
+            property.load(fis);
+
+            feignAppid = property.getProperty("FEIGN_APPID");
+            System.out.println(feignAppid);
+
+            feignCurrentUrl = property.getProperty("FEIGN_CURRENTURL") + "?app_id=" + feignAppid;
+            System.out.println(feignCurrentUrl);
+
+            feignYesterdayUrl = property.getProperty("FEIGN_YESTERDAYURL") + yesterday + ".json?app_id=" + feignAppid;
+            System.out.println(feignYesterdayUrl);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        this.yesterdayRates = Feign.builder()
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .contract(new SpringMvcContract())
-                .target(CurrencyRates.class, url);
+                .target(CurrencyRates.class, feignYesterdayUrl);
+
+        this.currentRates = Feign.builder()
+                .encoder(new GsonEncoder())
+                .decoder(new GsonDecoder())
+                .contract(new SpringMvcContract())
+                .target(CurrencyRates.class, feignCurrentUrl);
+
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getRates")
     Currency getRates() {
-        return currencyRates.getRates();
+        System.out.println("ALL RIGHT");
+        Currency currentCurrency = currentRates.getCurrentRates();
+        System.out.println("Today = " + currentCurrency.getRates().get("RUB"));
+        Currency yesterdayCurrency = yesterdayRates.getYesterdayRates();
+        System.out.println("Yesterday = " + yesterdayCurrency.getRates().get("RUB"));
+        return yesterdayCurrency;
     }
+
 }
