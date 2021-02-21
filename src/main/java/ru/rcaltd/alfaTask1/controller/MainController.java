@@ -4,94 +4,62 @@ import feign.Feign;
 import feign.gson.GsonDecoder;
 import feign.gson.GsonEncoder;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rcaltd.alfaTask1.entity.Currency;
 import ru.rcaltd.alfaTask1.entity.GifObject;
 import ru.rcaltd.alfaTask1.repository.Rates;
+import ru.rcaltd.alfaTask1.service.TodayLinkService;
+import ru.rcaltd.alfaTask1.service.YesterdayLinkService;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.Properties;
 
 @RestController
 public class MainController {
-
-    final Rates currentRates;
-    final Rates yesterdayRates;
+    final YesterdayLinkService yesterdayLinkService;
+    final TodayLinkService todayLinkService;
+    String giphyPositiveUrl;
+    String giphyNegativeUrl;
     final Rates giphyPositive;
     final Rates giphyNegative;
-    private String feignCurrentUrl;
-    private String feignYesterdayUrl;
-    private String feignAppid;
-    private String giphyApiKey;
-    private String giphyRating;
-    private String giphyPositiveTag;
-    private String giphyNegativeTag;
-    private String giphyPositiveUrl;
-    private String giphyNegativeUrl;
 
-
-    public MainController() {
-
-        LocalDate yesterday = LocalDate.now().minusDays(1);
+    public MainController(YesterdayLinkService yesterdayLinkService, TodayLinkService todayLinkService) {
 
         Properties property = new Properties();
+
         try (
                 FileInputStream fis = new FileInputStream("src/main/resources/application.properties")) {
             property.load(fis);
 
-            feignAppid = property.getProperty("FEIGN_APPID");
-            System.out.println(feignAppid);
+            String giphyApiKey = property.getProperty("GIPHY_APIKEY");
 
-            feignCurrentUrl = property.getProperty("FEIGN_CURRENTURL") + "?app_id=" + feignAppid;
-            System.out.println(feignCurrentUrl);
+            String giphyRating = property.getProperty("GIPHY_RATING");
 
-            feignYesterdayUrl = property.getProperty("FEIGN_YESTERDAYURL") + yesterday + ".json?app_id=" + feignAppid;
-            System.out.println(feignYesterdayUrl);
+            String giphyPositiveTag = property.getProperty("GIPHY_POSITIVE");
 
-            giphyApiKey = property.getProperty("GIPHY_APIKEY");
-            System.out.println(giphyApiKey);
-
-            giphyRating = property.getProperty("GIPHY_RATING");
-            System.out.println(giphyRating);
-
-            giphyPositiveTag = property.getProperty("GIPHY_POSITIVE");
-            System.out.println(giphyPositiveTag);
-
-            giphyNegativeTag = property.getProperty("GIPHY_NEGATIVE");
-            System.out.println(giphyNegativeTag);
+            String giphyNegativeTag = property.getProperty("GIPHY_NEGATIVE");
 
             giphyPositiveUrl = property.getProperty("GIPHY_URL")
                     + "?api_key=" + giphyApiKey
                     + "&tag=" + giphyPositiveTag
                     + "&rating=" + giphyRating;
-            System.out.println(giphyPositiveUrl);
 
             giphyNegativeUrl = property.getProperty("GIPHY_URL")
                     + "?api_key=" + giphyApiKey
                     + "&tag=" + giphyNegativeTag
                     + "&rating=" + giphyRating;
-            System.out.println(giphyNegativeUrl);
 
-        } catch (IOException e) {
+        } catch (
+                IOException e) {
             e.printStackTrace();
         }
 
-        this.yesterdayRates = Feign.builder()
-                .encoder(new GsonEncoder())
-                .decoder(new GsonDecoder())
-                .contract(new SpringMvcContract())
-                .target(Rates.class, feignYesterdayUrl);
-
-        this.currentRates = Feign.builder()
-                .encoder(new GsonEncoder())
-                .decoder(new GsonDecoder())
-                .contract(new SpringMvcContract())
-                .target(Rates.class, feignCurrentUrl);
-
+        this.todayLinkService = todayLinkService;
+        this.yesterdayLinkService = yesterdayLinkService;
         this.giphyPositive = Feign.builder()
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
@@ -106,10 +74,11 @@ public class MainController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getRates")
-    public String getRates() {
-        Currency currentCurrency = currentRates.getCurrentRates();
-        Currency yesterdayCurrency = yesterdayRates.getYesterdayRates();
+    @RequestMapping(method = RequestMethod.GET, value = "/getGiphy/{currencyCode}")
+    public String getGiphy(@PathVariable String currencyCode) {
+
+        Currency currentCurrency = todayLinkService.getTodayRates(currencyCode).getCurrentRates();
+        Currency yesterdayCurrency = yesterdayLinkService.getYesterdayRates(currencyCode).getYesterdayRates();
 
         GifObject positiveGifObject = giphyPositive.getGiphyPositive();
         GifObject negativeGifObject = giphyNegative.getGiphyPositive();
@@ -119,4 +88,8 @@ public class MainController {
                 : negativeGifObject.getData().get("image_url").toString();
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getGiphy")
+    public String getGiphyWithoutCurrencyCode() {
+        return "Error! You have to point currency code.";
+    }
 }
