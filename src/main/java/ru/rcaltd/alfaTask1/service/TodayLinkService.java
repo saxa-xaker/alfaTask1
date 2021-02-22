@@ -11,7 +11,6 @@ import ru.rcaltd.alfaTask1.repository.Rates;
 @Service
 public class TodayLinkService {
 
-
     @Value("${FEIGN_APPID}")
     private String feignAppid;
 

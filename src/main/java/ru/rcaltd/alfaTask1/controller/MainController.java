@@ -1,11 +1,11 @@
 package ru.rcaltd.alfaTask1.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.rcaltd.alfaTask1.entity.Currency;
-import ru.rcaltd.alfaTask1.entity.GifObject;
 import ru.rcaltd.alfaTask1.service.NegativeGiphyLinkService;
 import ru.rcaltd.alfaTask1.service.PositiveGiphyLinkService;
 import ru.rcaltd.alfaTask1.service.TodayLinkService;
@@ -13,6 +13,9 @@ import ru.rcaltd.alfaTask1.service.YesterdayLinkService;
 
 @RestController
 public class MainController {
+
+    @Value("${FEIGN_CURRENCYCODE2}")
+    private String currenceCode2;
 
     final TodayLinkService todayLinkService;
     final YesterdayLinkService yesterdayLinkService;
@@ -31,23 +34,28 @@ public class MainController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/getGiphy/{currencyCode}")
-    public String getGiphy(@PathVariable String currencyCode) {
-
-        Currency currentCurrency = todayLinkService.getTodayRates(currencyCode).getCurrentRates();
-        Currency yesterdayCurrency = yesterdayLinkService.getYesterdayRates(currencyCode).getYesterdayRates();
-
-        GifObject positiveGifObject = giphyPositive.getPositiveGiphy().getGiphyPositive();
-        GifObject negativeGifObject = giphyNegative.getNegativeGiphy().getGiphyNegative();
-        if (yesterdayCurrency.getRates().get("RUB").equals(currentCurrency.getRates().get("RUB")))
-            return "Info! Rate has not changed";
-        return (yesterdayCurrency.getRates().get("RUB") < currentCurrency.getRates().get("RUB"))
-                ? positiveGifObject.getData().get("image_url").toString()
-                : negativeGifObject.getData().get("image_url").toString();
+    @RequestMapping(method = RequestMethod.GET, value = "/")
+    public String getRoot() {
+        return "Info! Check the weather with Ex: /getGiphy/USD";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getGiphy")
     public String getGiphyWithoutCurrencyCode() {
         return "Warning! Check currency code. Ex: /getGiphy/USD";
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/getGiphy/{currencyCode}")
+    public String getGiphyUrl(@PathVariable String currencyCode) {
+
+        Currency currentCurrency = todayLinkService.getTodayRates(currencyCode).getCurrentRates();
+        Currency yesterdayCurrency = yesterdayLinkService.getYesterdayRates(currencyCode).getYesterdayRates();
+
+        if (currentCurrency.getRates().get(currenceCode2).equals(yesterdayCurrency.getRates().get(currenceCode2))) {
+            return "Info! Rate has not changed";
+        }
+
+        return (currentCurrency.getRates().get(currenceCode2) > yesterdayCurrency.getRates().get(currenceCode2))
+                ? giphyPositive.getGiphy().getGiphyPositive().getData().get("image_url").toString()
+                : giphyNegative.getGiphy().getGiphyNegative().getData().get("image_url").toString();
     }
 }
