@@ -6,7 +6,6 @@ import lombok.Data;
 public class Rates {
 
     private String currencyCode;
-
     private double currencyRate;
 
     public Rates() {

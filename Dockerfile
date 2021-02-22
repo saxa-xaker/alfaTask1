@@ -19,4 +19,4 @@ WORKDIR alfaTask1
 #
 RUN gradle bootJar --rerun-tasks --no-build-cache
 #
-ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-0.7.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-0.8.jar"]
