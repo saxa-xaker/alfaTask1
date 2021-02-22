@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'ru.rcaltd'
-version = '0.4'
+version = '0.5'
 sourceCompatibility = '11'
 
 repositories {
@@ -34,4 +34,9 @@ dependencyManagement {
 
 test {
 	useJUnitPlatform()
+}
+processResources {
+	filesMatching('application.properties') {
+		expand(project.properties)
+	}
 }
