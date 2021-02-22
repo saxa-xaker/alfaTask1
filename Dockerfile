@@ -17,6 +17,6 @@ RUN git clone https://github.com/saxa-xaker/alfaTask1.git
 #
 WORKDIR alfaTask1
 #
-RUN gradle clean bootJar --rerun-tasks --no-build-cache
+RUN gradle bootJar --rerun-tasks --no-build-cache
 #
-ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-0.6.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-0.7.jar"]
