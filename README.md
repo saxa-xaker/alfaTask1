@@ -9,4 +9,4 @@ To start microservice on GNU/Linux:
 5. Requirements: git, java 11 or higher, gradle 6.8.2. To start with Docker need Docker.
 
 #HOW TO USE
-Send request to endpoint /getGiphy/xxx, where xxx - currency code. For example: /getGiphy/usd
+Send HTTP GET request to endpoint /getGiphy/xxx, where xxx - currency code. For example: /getGiphy/usd
