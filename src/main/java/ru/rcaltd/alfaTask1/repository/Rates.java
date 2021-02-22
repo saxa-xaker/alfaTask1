@@ -12,7 +12,7 @@ public interface Rates {
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
-    Currency getCurrentRates();
+    Currency getTodayRates();
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
@@ -27,4 +27,7 @@ public interface Rates {
     GifObject getGiphyNegative();
 
 
+    @RequestMapping(method = RequestMethod.GET)
+    @Headers("Content-Type: application/json")
+    feign.Response getCurrencyObject();
 }
