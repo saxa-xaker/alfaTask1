@@ -23,7 +23,7 @@ public class NegativeGiphyLinkService {
     @Value("${GIPHY_URL}")
     private String giphyUrl;
 
-    public Rates getNegativeGiphy() {
+    public Rates getGiphy() {
 
         String giphyNegativeUrl = giphyUrl
                 + "?api_key=" + giphyApiKey
