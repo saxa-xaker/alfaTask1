@@ -14,16 +14,19 @@ import java.time.LocalDate;
 public class YesterdayLinkService {
 
     @Value("${FEIGN_APPID}")
-    private String feignAppid;
+    private String feignAppId;
 
     @Value("${FEIGN_YESTERDAYURL}")
     private String feignYesterdayUrl;
 
+    @Value("${FEIGN_DAYSCOUNT}")
+    private int feignDaysCount;
+
     public Rates getYesterdayRates(String currencyCode) {
 
         String feignYesterdayUrlFull = feignYesterdayUrl
-                + LocalDate.now().minusDays(1)
-                + ".json?app_id=" + feignAppid
+                + LocalDate.now().minusDays(feignDaysCount)
+                + ".json?app_id=" + feignAppId
                 + "&base=" + currencyCode;
 
         return Feign.builder()
