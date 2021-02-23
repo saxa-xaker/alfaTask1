@@ -12,7 +12,7 @@ import ru.rcaltd.alfaTask1.repository.Rates;
 public class TodayLinkService {
 
     @Value("${FEIGN_APPID}")
-    private String feignAppid;
+    private String feignAppId;
 
     @Value("${FEIGN_TODAYURL}")
     private String feignTodayUrl;
@@ -20,7 +20,7 @@ public class TodayLinkService {
     public Rates getTodayRates(String currencyCode) {
 
         String feignTodayUrlFull = feignTodayUrl
-                + "?app_id=" + feignAppid
+                + "?app_id=" + feignAppId
                 + "&base=" + currencyCode;
 
         return Feign.builder()

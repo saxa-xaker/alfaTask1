@@ -23,17 +23,18 @@ public class NegativeGiphyLinkService {
     @Value("${GIPHY_URL}")
     private String giphyUrl;
 
-    public Rates getGiphy() {
-
-        String giphyNegativeUrl = giphyUrl
+    private String makeLink() {
+        return giphyUrl
                 + "?api_key=" + giphyApiKey
                 + "&tag=" + giphyNegativeTag
                 + "&rating=" + giphyRating;
+    }
 
+    public Rates getGiphy() {
         return Feign.builder()
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .contract(new SpringMvcContract())
-                .target(Rates.class, giphyNegativeUrl);
+                .target(Rates.class, makeLink());
     }
 }
