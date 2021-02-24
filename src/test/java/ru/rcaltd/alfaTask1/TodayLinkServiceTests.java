@@ -24,7 +24,7 @@ class TodayLinkServiceTests {
     private String feignTodayUrl;
 
     @Test
-    public void givenFeignUrlWithWrongAppId_whenWrongAppIdUrlRetrieve_then401IsReceived()
+    public void givenFeignTodayUrlWithWrongAppId_whenWrongAppIdTodayUrlRetrieve_then401IsReceived()
             throws IOException {
 
         // Given
@@ -41,9 +41,9 @@ class TodayLinkServiceTests {
                 equalTo(HttpStatus.SC_UNAUTHORIZED));
     }
 
-    //    BUG or mistake at openexchangerates.ogr When app_id missed, service must answer 401 code, but 403 is it.
+    //    Глюк at openexchangerates.ogr When app_id missed, service must answer 401 code, but getting 403.
     @Test
-    public void givenFeignUrlWithoutAppId_whenUrlWithoutAppIdRetrieve_then403IsReceived()
+    public void givenFeignTodayUrlWithoutAppId_whenUrlWithoutAppIdTodayUrlRetrieve_then403IsReceived()
             throws IOException {
 
         // Given
@@ -59,7 +59,7 @@ class TodayLinkServiceTests {
     }
 
     @Test
-    public void givenFeignUrlWithoutBase_whenUrlWithoutBaseRetrieve_then200IsReceived()
+    public void givenFeignTodayUrlWithoutBase_whenTodayUrlWithoutBaseRetrieve_then200IsReceived()
             throws IOException {
 
         // Given
@@ -76,7 +76,7 @@ class TodayLinkServiceTests {
 
     //  403 "Not allowed". Description: Changing the API `base` currency is available for Developer, Enterprise and Unlimited plan clients.
     @Test
-    public void givenFeignUrlWithoutBaseValue_whenUrlWithoutBaseRetrieve_then403IsReceived()
+    public void givenFeignTodayUrlWithoutBaseValue_whenTodayUrlWithoutBaseRetrieve_then403IsReceived()
             throws IOException {
 
         // Given
