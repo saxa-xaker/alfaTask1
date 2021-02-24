@@ -11,21 +11,21 @@ import ru.rcaltd.alfaTask1.repository.Rates;
 import java.time.LocalDate;
 
 @Service
-public class YesterdayLinkService {
+public class OldLinkService {
 
     @Value("${FEIGN_APPID}")
     private String feignAppId;
 
-    @Value("${FEIGN_YESTERDAYURL}")
-    private String feignYesterdayUrl;
+    @Value("${FEIGN_OLDURL}")
+    private String feignOldUrl;
 
-    @Value("${FEIGN_DAYSCOUNT}")
-    private int feignDaysCount;
+    @Value("${FEIGN_DAYSTOBACK}")
+    private int feignDaysToBack;
 
-    public Rates getYesterdayRates(String currencyCode) {
+    public Rates getOldRates(String currencyCode) {
 
-        String feignYesterdayUrlFull = feignYesterdayUrl
-                + LocalDate.now().minusDays(feignDaysCount)
+        String feignOldUrlFull = feignOldUrl
+                + LocalDate.now().minusDays(feignDaysToBack)
                 + ".json?app_id=" + feignAppId
                 + "&base=" + currencyCode;
 
@@ -33,6 +33,6 @@ public class YesterdayLinkService {
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .contract(new SpringMvcContract())
-                .target(Rates.class, feignYesterdayUrlFull);
+                .target(Rates.class, feignOldUrlFull);
     }
 }

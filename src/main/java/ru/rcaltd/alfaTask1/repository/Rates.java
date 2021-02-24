@@ -16,7 +16,7 @@ public interface Rates {
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
-    Currency getYesterdayRates();
+    Currency getOldRates();
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
@@ -25,7 +25,6 @@ public interface Rates {
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")
     GifObject getGiphyNegative();
-
 
     @RequestMapping(method = RequestMethod.GET)
     @Headers("Content-Type: application/json")

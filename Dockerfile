@@ -13,10 +13,12 @@ ENV PATH $PATH:/gradle-6.8.2/bin
 #
 RUN apt-get install git -y
 #
+RUN rm -rf alfaTask1
+#
 RUN git clone https://github.com/saxa-xaker/alfaTask1.git
 #
 WORKDIR alfaTask1
 #
-RUN gradle bootJar --rerun-tasks --no-build-cache
+RUN gradle bootJar --no-build-cache
 #
-ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-0.9.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/alfaTask1-1.0-a.jar"]
