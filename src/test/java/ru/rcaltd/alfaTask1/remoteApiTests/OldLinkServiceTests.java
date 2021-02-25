@@ -1,4 +1,21 @@
-package ru.rcaltd.alfaTask1;
+/*
+ * *
+ *  * Copyright 2009-2021 The Rcaltd
+ *  *
+ *  * Licensed under theGNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (the "License");
+ *  * you may not use this file except
+ *  * in compliance with the License. You may obtain a copy of the License at
+ *  *
+ *  * https://www.gnu.org/licenses/old-licenses/lgpl-2.1.ru.html
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software distributed under the License
+ *  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ *  * or implied. See the License for the specific language governing permissions and limitations under
+ *  * the License.
+ *
+ */
+
+package ru.rcaltd.alfaTask1.remoteApiTests;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -27,8 +44,8 @@ class OldLinkServiceTests {
     @Value("${FEIGN_DAYSTOBACK}")
     private int feignDaysToBack;
 
-    /*      Get answer, when app_id missed,
-    service must return 401 code\. */
+    /*      Get answer, when app_id wrong,
+    service must return 401 code. */
     @Test
     public void givenFeignOldUrlWithWrongAppId_whenWrongAppIdUrlRetrieve_then401IsReceived()
             throws IOException {
@@ -88,7 +105,8 @@ class OldLinkServiceTests {
                 equalTo(HttpStatus.SC_OK));
     }
 
-    //  403 "Not allowed". Description: Changing the API `base` currency is available for Developer, Enterprise and Unlimited plan clients.
+    /*  403 "Not allowed". Description: Changing the API `base` currency is available
+    for Developer, Enterprise and Unlimited plan clients.  */
     @Test
     public void givenFeignOldUrlWithoutBaseValue_whenUrlWithoutBaseRetrieve_then403IsReceived()
             throws IOException {
