@@ -124,7 +124,7 @@ class OldLinkServiceTests {
                 equalTo(HttpStatus.SC_FORBIDDEN));
     }
 
-    //  400 "Bad Request". Description: Client requested rates for an unsupported base currency.
+    /*  400 "Bad Request". Description: Client requested rates for an unsupported base currency.  */
     @Test
     public void givenFeignOldUrlWithZeroDate_whenOldUrlZeroDateRetrieve_then400IsReceived()
             throws IOException {
@@ -141,7 +141,7 @@ class OldLinkServiceTests {
                 equalTo(HttpStatus.SC_BAD_REQUEST));
     }
 
-    //  400 "Bad Request". Description: Client requested rates for an unsupported base currency.
+    /*  400 "Bad Request". Description: Client requested rates for an unsupported base currency.  */
     @Test
     public void givenFeignOldUrlWithoutDate_whenOldUrlWithoutDateRetrieve_then400IsReceived()
             throws IOException {

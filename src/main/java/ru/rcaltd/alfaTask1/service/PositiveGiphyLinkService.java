@@ -44,7 +44,29 @@ public class PositiveGiphyLinkService {
     @Value("${GIPHY_URL}")
     private String giphyUrl;
 
+    private boolean checkGiphyApiKey() {
+        return giphyApiKey == null;
+    }
+
+    private boolean checkGiphyPositiveTag() {
+        return giphyPositiveTag == null;
+    }
+
+    private boolean checkGiphyRating() {
+        return giphyRating == null;
+    }
+
+    private boolean checkGiphyUrl() {
+        return giphyUrl == null;
+    }
+
+
     public Rates getGiphy() {
+
+        if (checkGiphyApiKey() && checkGiphyPositiveTag()
+                && checkGiphyRating() && checkGiphyUrl()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Please, check giphy settings.");
+        }
 
         String giphyPositiveUrl = giphyUrl
                 + "?api_key=" + giphyApiKey
