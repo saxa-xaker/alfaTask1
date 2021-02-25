@@ -31,7 +31,7 @@ import ru.rcaltd.alfaTask1.utils.StringValidator;
 
 @RestController
 @RequestMapping("/api/v1")
-public class MainController {
+public class MainV1Controller {
 
     final CurrencyObjectService currencyObjectService;
     final TodayLinkService todayLinkService;
@@ -42,11 +42,11 @@ public class MainController {
     private String currencyCode2;
     private String currencyObjectString;
 
-    public MainController(CurrencyObjectService currencyObjectService,
-                          TodayLinkService todayLinkService,
-                          OldLinkService oldLinkService,
-                          PositiveGiphyLinkService giphyPositive,
-                          NegativeGiphyLinkService giphyNegative) {
+    public MainV1Controller(CurrencyObjectService currencyObjectService,
+                            TodayLinkService todayLinkService,
+                            OldLinkService oldLinkService,
+                            PositiveGiphyLinkService giphyPositive,
+                            NegativeGiphyLinkService giphyNegative) {
         this.currencyObjectService = currencyObjectService;
         this.todayLinkService = todayLinkService;
         this.oldLinkService = oldLinkService;
@@ -55,11 +55,11 @@ public class MainController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
-    public String getRoot() {
+    public String getRootV1() {
         return "To begin, check the /api/v1/getHelp";
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/api/v1/getHelp")
+    @RequestMapping(method = RequestMethod.GET, value = "/getHelp")
     public String getHelp() {
         return "Hi, there!\n" +
                 "This service is intended return animated gif,\n" +
@@ -118,14 +118,14 @@ public class MainController {
     @RequestMapping(method = RequestMethod.GET, value = "/getGiphy")
     public HttpStatus getGiphyWithoutCurrencyCode() {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please, " +
-                "check the available currency codes at /api/v1/getCurrencies");
+                "check the available currency codes at /api/v1/getCurrencyList");
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/getGiphy/{currencyCode}", produces = "application/json")
     public GifObject getGiphyUrl(@PathVariable String currencyCode) {
 
-        // Reject, if currencyCode = null
-        if (currencyCode == null) {
+        // Reject, if currencyCode or currencyCode2 = null
+        if (currencyCode == null || currencyCode2 == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong. Please, " +
                     "try later.");
         }
@@ -133,18 +133,17 @@ public class MainController {
         // Reject, if blocked by validator
         if (!StringValidator.validate(currencyCode)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please, " +
-                    "check the available currency codes at /api/v1/getCurrencies");
+                    "check the available currency codes at /api/v1/getCurrencyList");
         }
 
-        // Reject, if found self comparison
-        if (currencyCode2 == null) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong. Please, " +
-                    "try later.");
+        // Reject, if blocked by validator
+        if (!StringValidator.validate(currencyCode2)) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Please, check Feign settings");
         }
-
         // Reject, if found self comparison
         if (currencyCode.equalsIgnoreCase(currencyCode2)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please, enter a different value, than RUB");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please, " +
+                    "enter a different value, than " + currencyCode2);
         }
 
         // If list of currencies = null, trying to get it.
@@ -155,7 +154,7 @@ public class MainController {
         // Reject, If currency code, given by url was not found in the list of currencies
         if (!currencyObjectString.contains(currencyCode.toUpperCase())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Please, check " +
-                    "the available currency codes at /api/v1/getCurrencies");
+                    "the available currency codes at /api/v1/getCurrencyList");
         }
 
         // Getting the current rate

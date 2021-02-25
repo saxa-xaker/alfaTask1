@@ -147,7 +147,7 @@ public class StringValidatorTest {
                 equalTo(false));
     }
 
-    /*  Return FALSE, if Currency Code contains "_" */
+    /*  Return FALSE, if Currency Code contains "#" */
     @Test
     public void givenIncorrectCurrencyCodeDies_whenStringValidatorRetrieve_thenFalseReceived() {
 

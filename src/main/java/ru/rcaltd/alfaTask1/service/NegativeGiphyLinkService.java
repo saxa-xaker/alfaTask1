@@ -44,19 +44,39 @@ public class NegativeGiphyLinkService {
     @Value("${GIPHY_URL}")
     private String giphyUrl;
 
-    private String makeLink() {
-        return giphyUrl
+    private boolean checkGiphyApiKey() {
+        return giphyApiKey == null;
+    }
+
+    private boolean checkGiphyNegativeTag() {
+        return giphyNegativeTag == null;
+    }
+
+    private boolean checkGiphyRating() {
+        return giphyRating == null;
+    }
+
+    private boolean checkGiphyUrl() {
+        return giphyUrl == null;
+    }
+
+
+    public Rates getGiphy() {
+
+        if (checkGiphyApiKey() && checkGiphyNegativeTag()
+                && checkGiphyRating() && checkGiphyUrl()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Please, check giphy settings.");
+        }
+        String giphyNegativeUrl = giphyUrl
                 + "?api_key=" + giphyApiKey
                 + "&tag=" + giphyNegativeTag
                 + "&rating=" + giphyRating;
-    }
 
-    public Rates getGiphy() {
         return Feign.builder()
                 .encoder(new GsonEncoder())
                 .decoder(new GsonDecoder())
                 .contract(new SpringMvcContract())
-                .target(Rates.class, makeLink());
+                .target(Rates.class, giphyNegativeUrl);
     }
 
     public GifObject getNegativeGifObjectString() {

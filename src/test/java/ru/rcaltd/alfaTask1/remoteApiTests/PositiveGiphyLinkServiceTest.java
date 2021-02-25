@@ -32,13 +32,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @SpringBootTest
-class NegativeGiphyLinkServiceTest {
+class PositiveGiphyLinkServiceTest {
 
     @Value("${GIPHY_APIKEY}")
     private String giphyApiKey;
 
-    @Value("${GIPHY_NEGATIVE}")
-    private String giphyNegativeTag;
+    @Value("${GIPHY_POSITIVE}")
+    private String giphyPositiveTag;
 
     @Value("${GIPHY_RATING}")
     private String giphyRating;
@@ -46,53 +46,6 @@ class NegativeGiphyLinkServiceTest {
     @Value("${GIPHY_URL}")
     private String giphyUrl;
 
-    /*  Get answer, when tag is empty,
-     * service must return 200 code.  */
-    @Test
-    public void givenWithoutTag_whenWithoutTagUrlRetrieve_then200IsReceived()
-            throws IOException {
-
-        // Given
-        // Make url without tag
-        String withoutGiphyTag = giphyUrl
-                + "?api_key=" + giphyApiKey
-                + "&tag="
-                + "&rating=" + giphyRating;
-
-        HttpUriRequest request = new HttpGet(withoutGiphyTag);
-
-        // When
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        // Then
-        assertThat(
-                httpResponse.getStatusLine().getStatusCode(),
-                equalTo(HttpStatus.SC_OK));
-    }
-
-    /*  Get answer, when rating is absent,
-     * service must return 200 code. */
-    @Test
-    public void givenWithoutRating_whenWithoutRatingUrlRetrieve_then200IsReceived()
-            throws IOException {
-
-        // Given
-        // Make url without rating key
-        String withoutGiphyRating = giphyUrl
-                + "?api_key=" + giphyApiKey
-                + "&tag=" + giphyNegativeTag
-                + "&rating=";
-
-        HttpUriRequest request = new HttpGet(withoutGiphyRating);
-
-        // When
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        // Then
-        assertThat(
-                httpResponse.getStatusLine().getStatusCode(),
-                equalTo(HttpStatus.SC_OK));
-    }
 
     /*  Gets 403, when giphyApiKey is null,
      * service must return Forbidden. Description: You weren't authorized
@@ -106,7 +59,7 @@ class NegativeGiphyLinkServiceTest {
         String giphyApiKeyNull = null;
         String giphyApiKeyNullUrl = giphyUrl
                 + "?api_key=" + giphyApiKeyNull
-                + "&tag=" + giphyNegativeTag
+                + "&tag=" + giphyPositiveTag
                 + "&rating=" + giphyRating;
 
         HttpUriRequest request = new HttpGet(giphyApiKeyNullUrl);
@@ -120,6 +73,7 @@ class NegativeGiphyLinkServiceTest {
                 equalTo(HttpStatus.SC_FORBIDDEN));
     }
 
+
     /*  When api key is incorrect,
      * service must return 403 code. Description: You weren't authorized
      * to make your request; most likely this indicates an issue with your API Key. */
@@ -129,12 +83,13 @@ class NegativeGiphyLinkServiceTest {
 
         // Given
         // Make incorrect api key
-        String incorrectGiphyApiKey = giphyUrl
-                + "?api_key=" + "bi75yctrdh___t5h56fg"
-                + "&tag=" + giphyNegativeTag
+        String incorrectGiphyApiKey = "bi75yctrdh___t5h56fg";
+        String incorrectGiphyApiKeyUrl = giphyUrl
+                + "?api_key=" + incorrectGiphyApiKey
+                + "&tag=" + giphyPositiveTag
                 + "&rating=" + giphyRating;
 
-        HttpUriRequest request = new HttpGet(incorrectGiphyApiKey);
+        HttpUriRequest request = new HttpGet(incorrectGiphyApiKeyUrl);
 
         // When
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
@@ -154,12 +109,12 @@ class NegativeGiphyLinkServiceTest {
 
         // Given
         // Make url without api key
-        String withoutGiphyApiKey = giphyUrl
+        String withoutGiphyApiKeyUrl = giphyUrl
                 + "?api_key="
-                + "&tag=" + giphyNegativeTag
+                + "&tag=" + giphyPositiveTag
                 + "&rating=" + giphyRating;
 
-        HttpUriRequest request = new HttpGet(withoutGiphyApiKey);
+        HttpUriRequest request = new HttpGet(withoutGiphyApiKeyUrl);
 
         // When
         HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);

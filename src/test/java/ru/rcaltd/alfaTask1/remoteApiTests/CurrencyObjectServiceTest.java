@@ -40,7 +40,26 @@ class CurrencyObjectServiceTest {
     private String feignCurrencyUrl;
 
 
-    /*  #Very stupidly test# Get answer, when feignCurrencyUrl is empty,
+    /*  Get 200 answer, when feignCurrencyUrl is correct,
+    service must return 200 Ok.  */
+    @Test
+    public void givenFeignCurrencyCorrectUrl_whenCorrectUrlRetrieve_then200IsReceived()
+            throws IOException {
+
+        // Given
+        // Generate wrong currencies link, cutting link right side
+        HttpUriRequest request = new HttpGet(feignCurrencyUrl);
+
+        // When
+        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+
+        // Then
+        assertThat(
+                httpResponse.getStatusLine().getStatusCode(),
+                equalTo(HttpStatus.SC_OK));
+    }
+
+    /*  #Very stupid test# Get answer, when feignCurrencyUrl is empty,
     service must return ClientProtocolException. */
     @Test
     public void givenFeignEmptyUrl_whenEmptyUrlRetrieve_thenClientProtocolExceptionIsReceived()
@@ -81,24 +100,5 @@ class CurrencyObjectServiceTest {
         assertThat(
                 httpResponse.getStatusLine().getStatusCode(),
                 equalTo(HttpStatus.SC_METHOD_NOT_ALLOWED));
-    }
-
-    /*  Get answer, when feignCurrencyUrl is correct,
-    service must return 200 code.  */
-    @Test
-    public void givenFeignCurrencyCorrectUrl_whenCorrectUrlRetrieve_then200IsReceived()
-            throws IOException {
-
-        // Given
-        // Generate wrong currencies link, cutting link right side
-        HttpUriRequest request = new HttpGet(feignCurrencyUrl);
-
-        // When
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        // Then
-        assertThat(
-                httpResponse.getStatusLine().getStatusCode(),
-                equalTo(HttpStatus.SC_OK));
     }
 }
