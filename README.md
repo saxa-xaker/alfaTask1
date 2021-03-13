@@ -2,9 +2,8 @@
  To start microservice on GNU/Linux(tested on Debian):
 1. Requirements: git, java 11 or higher, gradle 6.8.2. To start with Docker, you will need a Docker.
 2. Clone this repo to your directory: $ git clone https://github.com/saxa-xaker/alfaTask1.git
-3. Go to alfatask1, if you can't: $ cd alfatask1/
-4. To create jar run: $ ./gradlew bootJar, and then start it with: java -jar build/libs/alfatask1-xx.jar,
-      where xx - alfatask1 version.
+3. Go to alfatask1: $ cd alfatask1/
+4. To create jar run: $ ./gradlew bootJar, and then start it with: java -jar build/libs/alfatask1-1.0-RC.jar.
       To only start service, run: $ ./gradlew bootRun
 5. To start by Docker run: $ docker build -t alfatask1 . && docker run -p 8080:8080 --name alfatask1 alfatask1
 6. Settings available at the {application.properties}. You have to check {application.properties}, replace
@@ -21,4 +20,4 @@ Other way return message, something about, rate has not been changed.
 If you want to get gif, send request with currency code, like "USD" (default value) or "GBP".
 So, request will be looks like: http(s)://your_server_address:8080/api/v1/getGiphy/USD.
 You can check available currency codes, sending request to /api/v1/getCurrencyList.
-So good luck!
+So, good luck!
