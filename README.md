@@ -2,7 +2,7 @@
  To start microservice on GNU/Linux(tested on Debian):
 1. Requirements: git, java 11 or higher, gradle 6.8.2. To start with Docker, you will need a Docker.
 2. Clone this repo to your directory: $ git clone https://github.com/saxa-xaker/alfaTask1.git
-3. Go to alfatask1, if ypu can't: $ cd alfatask1/
+3. Go to alfatask1, if you can't: $ cd alfatask1/
 4. To create jar run: $ ./gradlew bootJar, and then start it with: java -jar build/libs/alfatask1-xx.jar,
       where xx - alfatask1 version.
       To only start service, run: $ ./gradlew bootRun
