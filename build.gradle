@@ -1,18 +1,18 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.3'
+	id 'org.springframework.boot' version '2.6.3'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 }
 
 group = 'ru.rcaltd'
-version = '1.0-rc'
+version = '1.0-rc1'
 
 repositories {
 	mavenCentral()
 }
 
 ext {
-	set('springCloudVersion', "2020.0.1")
+	set('springCloudVersion', "2021.0.1")
 }
 
 dependencies {
@@ -23,7 +23,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.16'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 }
 
 dependencyManagement {

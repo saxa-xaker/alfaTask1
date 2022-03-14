@@ -3,8 +3,8 @@
 1. Requirements: git, java 11 or higher, gradle 6.8.2. To start with Docker, you will need a Docker.
 2. Clone this repo to your directory: $ git clone https://github.com/saxa-xaker/alfaTask1.git
 3. Go to alfatask1: $ cd alfatask1/
-4. To create jar run: $ ./gradlew bootJar, and then start it with: java -jar build/libs/alfatask1-1.0-RC.jar.
-      To only start service, run: $ ./gradlew bootRun
+4. To create jar run: $ ./gradlew bootJar, and then start it with: java -jar build/libs/alfatask1-1.0-RC1.jar. To only
+   start service, run: $ ./gradlew bootRun
 5. To start by Docker run: $ docker build -t alfatask1 . && docker run -p 8080:8080 --name alfatask1 alfatask1
 6. Settings available at the {application.properties}. You have to check {application.properties}, replace
    given app_id und api_key with your credentials. You can also set server port, as you need.

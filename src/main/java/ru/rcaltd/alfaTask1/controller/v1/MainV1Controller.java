@@ -1,6 +1,6 @@
 /*
  * *
- *  * Copyright 2009-2021 The Rcaltd
+ *  * Copyright 2009-2022 The Rcaltd
  *  *
  *  * Licensed under theGNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (the "License");
  *  * you may not use this file except
@@ -73,7 +73,7 @@ public class MainV1Controller {
                 "or \"GBP\" (Great Britain Pound).\n" +
                 "So whole request will be looks like: /api/v1/getGiphy/USD\n" +
                 "You can check available currencies codes, sending request to /api/v1/getCurrencyList\n" +
-                "So good luck!\n";
+                "So, good luck!\n";
     }
 
     /*This method takes from openexchangerates.org list of currencies and return serialized object
